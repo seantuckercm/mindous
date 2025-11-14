@@ -9,6 +9,8 @@
     "lint": "next lint",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
+    "db:push": "npx drizzle-kit push",
+    "db:studio": "npx drizzle-kit studio",
     "type-check": "tsc --noEmit",
     "video": "remotion studio",
     "render": "remotion render src/remotion/index.tsx ShowcaseVideo out/video.mp4"
