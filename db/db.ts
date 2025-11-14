@@ -7,6 +7,12 @@ import { agentsTable } from "./schema/agents";
 import { executionsTable } from "./schema/executions";
 import { llmConfigsTable } from "./schema/llmConfigs";
 import { contextTable } from "./schema/context";
+import { 
+  llmUsageLogsTable, 
+  llmProviderStatsTable, 
+  llmRouteCacheTable, 
+  llmCircuitBreakersTable 
+} from "./schema/llm-routing";
 
 // Define the schema properly
 const schema = { 
@@ -16,7 +22,11 @@ const schema = {
   agents: agentsTable,
   executions: executionsTable,
   llmConfigs: llmConfigsTable,
-  context: contextTable
+  context: contextTable,
+  llmUsageLogs: llmUsageLogsTable,
+  llmProviderStats: llmProviderStatsTable,
+  llmRouteCache: llmRouteCacheTable,
+  llmCircuitBreakers: llmCircuitBreakersTable
 };
 
 // Add connection options with improved timeout and retry settings for Vercel environment
