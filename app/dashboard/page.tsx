@@ -5,6 +5,7 @@
  * Requires a paid membership to access
  */
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import TaskForm from "@/src/components/task-form";
 
 /**
  * Main dashboard page component
@@ -14,6 +15,13 @@ export default function DashboardPage() {
   return (
     <main className="p-6 md:p-10">
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      
+      {/* Task Creation Section */}
+      <div className="mb-8">
+        <TaskForm />
+      </div>
+
+      {/* Dashboard Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
