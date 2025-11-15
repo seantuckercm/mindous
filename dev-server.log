@@ -1,0 +1,860 @@
+
+> mindous@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.7
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.4s
+ ✓ Compiled /middleware in 258ms (223 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 3.5s (1905 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ ✓ Compiled in 505ms (739 modules)
+ ✓ Compiled in 104ms (727 modules)
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:375:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1151:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+Checking for pending profile with email sean@couplemill.com for user user_35Scncoge2wvzdp0l48thxbzppM
+===== CLAIM PROFILE START =====
+Attempting to claim pending profile for user user_35Scncoge2wvzdp0l48thxbzppM with email sean@couplemill.com
+Checking if user user_35Scncoge2wvzdp0l48thxbzppM already has a profile...
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Existing profile check result: No profile found
+Looking for pending profile with email: sean@couplemill.com
+Pending profile search result: No pending profile found
+No pending profile found in new table, checking old system...
+No pending profile found for email: sean@couplemill.com in either system
+No pending profile found, creating new profile for user user_35Scncoge2wvzdp0l48thxbzppM with email sean@couplemill.com
+Creating profile with data: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  email: 'sean@couplemill.com',
+  membership: 'free',
+  usageCredits: 5,
+  usedCredits: 0,
+  status: 'active'
+}
+ GET / 200 in 10006ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST / 200 in 171ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST / 200 in 161ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 987ms (2304 modules)
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 1716ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=3y0gy 200 in 585ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 587ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 163ms
+ ✓ Compiled /api/tasks in 396ms (1503 modules)
+ POST /api/tasks 201 in 1049ms
+ ○ Compiling /dashboard/targets ...
+ ✓ Compiled /dashboard/targets in 673ms (2312 modules)
+ ✓ Compiled /dashboard/data-source in 482ms (2314 modules)
+ ✓ Compiled /dashboard/settings in 443ms (2316 modules)
+ ✓ Compiled /dashboard/members in 490ms (2318 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ GET / 200 in 142ms
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5046ms
+ GET / 200 in 54ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5041ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 561ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 550ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 563ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 507ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5046ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 505ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5040ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 578ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 566ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 493ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5040ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 542ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 563ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 509ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 694ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 510ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5061ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 509ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 527ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 480ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 505ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ GET / 200 in 569ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 160ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 157ms
+ GET / 200 in 61ms
+ GET / 200 in 51ms
+ GET / 200 in 42ms
+ GET / 200 in 50ms
+ GET / 200 in 43ms
+ GET / 200 in 43ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 533ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5042ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 568ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 578ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 576ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 527ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 469ms
+ GET / 200 in 47ms
+ GET / 200 in 45ms
+ GET / 200 in 52ms
+ GET / 200 in 43ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5033ms
+ GET / 200 in 40ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 546ms
+ GET / 200 in 42ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 560ms
+ GET / 200 in 43ms
+ GET / 200 in 48ms
+ GET / 200 in 41ms
+ GET / 200 in 39ms
+ GET / 200 in 44ms
+ GET / 200 in 43ms
+ GET / 200 in 44ms
+ GET / 200 in 42ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ GET / 200 in 42ms
+ GET / 200 in 42ms
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5032ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 489ms
+ GET / 200 in 44ms
+ GET / 200 in 41ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 532ms
+ GET / 200 in 47ms
+ GET / 200 in 69ms
+ GET / 200 in 42ms
+ GET / 200 in 42ms
+ GET / 200 in 40ms
+ GET / 200 in 39ms
+ GET / 200 in 42ms
+ ✓ Compiled in 699ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 642ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 516ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 494ms
+ GET / 200 in 46ms
+ GET / 200 in 39ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 541ms
+ GET / 200 in 46ms
+ ✓ Compiled in 528ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 808ms
+ ✓ Compiled in 259ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 292ms
+ GET / 200 in 42ms
+ ✓ Compiled in 262ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 812ms
+ GET / 200 in 48ms
+ GET / 200 in 44ms
+ ✓ Compiled in 384ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 647ms
+ GET / 200 in 46ms
+ GET / 200 in 41ms
+ GET / 200 in 41ms
+ GET / 200 in 42ms
+ GET / 200 in 41ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 464ms
+ GET / 200 in 39ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 473ms
+ GET / 200 in 40ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 558ms
+ GET / 200 in 38ms
+ GET / 200 in 39ms
+ GET / 200 in 40ms
+ GET / 200 in 40ms
+ GET / 200 in 41ms
+ GET / 200 in 42ms
+ GET / 200 in 44ms
+ GET / 200 in 45ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 495ms
+ GET / 200 in 43ms
+ GET / 200 in 43ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 487ms
+ GET / 200 in 39ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 565ms
+ GET / 200 in 41ms
+ GET / 200 in 45ms
+ GET / 200 in 40ms
+ GET / 200 in 41ms
+ GET / 200 in 38ms
+ GET / 200 in 41ms
+ GET / 200 in 48ms
+ GET / 200 in 65ms
+ GET / 200 in 40ms
+ GET / 200 in 41ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ GET / 200 in 42ms
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5031ms
+ GET / 200 in 42ms
+ GET / 200 in 39ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 566ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 499ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 555ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 530ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 454ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5030ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 459ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 567ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5033ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 553ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 549ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 566ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 468ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 565ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 651ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 554ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 492ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 496ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 564ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 497ms
+ GET / 200 in 44ms
+ GET / 200 in 39ms
+ GET / 200 in 44ms
+ GET / 200 in 48ms
+ GET / 200 in 45ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 574ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 487ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 483ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 545ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 489ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 570ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 487ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 591ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 557ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5033ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 533ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 544ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 490ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 487ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 565ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 568ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 558ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 545ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 500ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 541ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 465ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5030ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 547ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 566ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 1060ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 523ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 468ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 572ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 521ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 565ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Error getting profile by user ID: Error: write CONNECT_TIMEOUT aws-1-us-east-1.pooler.supabase.com:5432
+    at connectTimedOut (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:1528:60)
+    at Timeout.done [as _onTimeout] (/home/ubuntu/mindous/.next/server/vendor-chunks/postgres.js:2304:8)
+    at listOnTimeout (node:internal/timers:596:11)
+    at process.processTimers (node:internal/timers:529:7) {
+  code: 'CONNECT_TIMEOUT',
+  errno: 'CONNECT_TIMEOUT',
+  address: 'aws-1-us-east-1.pooler.supabase.com',
+  port: 5432
+}
+ POST /dashboard 200 in 5030ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 491ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 547ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard 200 in 551ms
+ ✓ Compiled in 421ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 557ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST / 200 in 565ms
+ ✓ Compiled in 1553ms (2537 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 2013ms
+ GET /dashboard?_rsc=cbwqv 200 in 631ms
+Looking up profile by user ID: user_35USAWtRy8XTpmtDyVLWWieu1Qv
+ POST /dashboard 200 in 156ms
+ ✓ Compiled in 435ms (818 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 709ms (2329 modules)
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/_not-found/page.js:2569:82)
+    at stringify (<anonymous>)
+digest: "2194610430"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/_not-found/page.js:2569:82)
+    at stringify (<anonymous>)
+digest: "2194610430"
+ GET /_next/static/css/app/layout.css?v=1763178635003 404 in 814ms
+ ⨯ Error: Cannot find module './948.js'
+Require stack:
+- /home/ubuntu/mindous/.next/server/webpack-runtime.js
+- /home/ubuntu/mindous/.next/server/app/_not-found/page.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/require.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/load-components.js
+- /home/ubuntu/mindous/node_modules/next/dist/build/utils.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/dev/hot-middleware.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/lib/router-server.js
+- /home/ubuntu/mindous/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1225:15)
+    at /home/ubuntu/mindous/node_modules/next/dist/server/require-hook.js:55:36
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/home/ubuntu/mindous/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at __webpack_require__.f.require (/home/ubuntu/mindous/.next/server/webpack-runtime.js:200:28)
+    at /home/ubuntu/mindous/.next/server/webpack-runtime.js:108:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/home/ubuntu/mindous/.next/server/webpack-runtime.js:107:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/home/ubuntu/mindous/.next/server/webpack-runtime.js:159:22)
+    at /home/ubuntu/mindous/.next/server/app/dashboard/page.js:1:7136
+    at Object.<anonymous> (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:1:7233)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1311:12)
+    at mod.require (/home/ubuntu/mindous/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:136:16)
+    at requirePage (/home/ubuntu/mindous/node_modules/next/dist/server/require.js:109:84)
+    at /home/ubuntu/mindous/node_modules/next/dist/server/load-components.js:98:84
+    at async loadComponentsImpl (/home/ubuntu/mindous/node_modules/next/dist/server/load-components.js:98:26)
+    at async DevServer.findPageComponentsImpl (/home/ubuntu/mindous/node_modules/next/dist/server/next-server.js:708:36)
+    at async DevServer.findPageComponents (/home/ubuntu/mindous/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (/home/ubuntu/mindous/node_modules/next/dist/server/base-server.js:1897:24)
+    at async DevServer.renderToResponseImpl (/home/ubuntu/mindous/node_modules/next/dist/server/base-server.js:1949:32)
+    at async DevServer.pipeImpl (/home/ubuntu/mindous/node_modules/next/dist/server/base-server.js:916:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/ubuntu/mindous/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/home/ubuntu/mindous/node_modules/next/dist/server/base-server.js:812:17)
+    at async /home/ubuntu/mindous/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/home/ubuntu/mindous/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/home/ubuntu/mindous/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/home/ubuntu/mindous/node_modules/next/dist/server/lib/router-server.js:173:21)
+    at async handleRequest (/home/ubuntu/mindous/node_modules/next/dist/server/lib/router-server.js:350:24)
+    at async requestHandlerImpl (/home/ubuntu/mindous/node_modules/next/dist/server/lib/router-server.js:374:13)
+    at async Server.requestListener (/home/ubuntu/mindous/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/home/ubuntu/mindous/.next/server/webpack-runtime.js',
+    '/home/ubuntu/mindous/.next/server/app/_not-found/page.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/require.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/load-components.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/build/utils.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/lib/router-server.js',
+    '/home/ubuntu/mindous/node_modules/next/dist/server/lib/start-server.js'
+  ],
+  page: '/dashboard'
+}
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 1186ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1145ms (2542 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 875ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard?_rsc=cbwqv 200 in 896ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard 200 in 916ms
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ GET /_next/static/css/app/layout.css?v=1763178637452 404 in 40ms
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ GET /_next/static/chunks/main-app.js?v=1763178637452 404 in 24ms
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ GET /_next/static/chunks/app-pages-internals.js 404 in 34ms
+ GET /_next/static/chunks/app/dashboard/page.js 404 in 33ms
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ ⨯ Error: Clerk: auth() was called but Clerk can't detect usage of clerkMiddleware() (or the deprecated authMiddleware()). Please ensure the following:
+-  clerkMiddleware() (or the deprecated authMiddleware()) is used in your Next.js Middleware.
+- Your Middleware matcher is configured to match this route or page.
+- If you are using the src directory, make sure the Middleware file is inside of it.
+
+For more details, see https://clerk.com/docs/quickstarts/nextjs
+
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:2733:13
+    at /home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:3893:19
+    at auth (/home/ubuntu/mindous/.next/server/vendor-chunks/@clerk.js:1120:5)
+    at RootLayout (/home/ubuntu/mindous/.next/server/app/dashboard/page.js:6745:82)
+    at stringify (<anonymous>)
+digest: "162646179"
+ GET /_next/static/chunks/app/dashboard/layout.js 404 in 24ms
+[?25h

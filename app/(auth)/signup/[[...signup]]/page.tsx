@@ -4,7 +4,7 @@ import { SignUp } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { claimPendingProfile } from "@/actions/whop-actions";
 import { useSignUp } from "@clerk/nextjs";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -20,8 +20,8 @@ import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
  * 3. Claiming any pending profiles after successful signup
  * 4. Showing success/error messages appropriately
  */
-export default function SignUpPage() {
-  const { theme } = useTheme();
+function SignUpContent() {
+  const { theme, systemTheme } = useTheme();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { isLoaded, signUp } = useSignUp();
@@ -36,10 +36,21 @@ export default function SignUpPage() {
   // Add a state to track the signup completion
   const [signupComplete, setSignupComplete] = useState(false);
   
+  // Track if component is mounted to prevent hydration issues
+  const [isMounted, setIsMounted] = useState(false);
+  
   // Extract email and token from URL params
   const email = searchParams.get("email");
   const token = searchParams.get("token");
   const isPaymentSuccess = searchParams.get("payment") === "success";
+  
+  // Determine the actual theme to use
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  
+  // Set mounted state after initial render
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   // Define handleProfileClaiming with useCallback to avoid dependency issues
   const handleProfileClaiming = useCallback(async (userId: string) => {
@@ -135,6 +146,17 @@ export default function SignUpPage() {
     checkAndClaimProfile();
   }, [isLoaded, signUp?.status, signUp?.createdUserId, email, token, router, handleProfileClaiming]);
   
+  // Don't render theme-dependent content until mounted to prevent hydration mismatch
+  if (!isMounted) {
+    return (
+      <div className="flex flex-col items-center w-full max-w-md">
+        <div className="w-full p-6 border border-gray-200 rounded-lg shadow-md bg-white text-center">
+          <Loader2 className="animate-spin h-8 w-8 mx-auto text-purple-600" />
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="flex flex-col items-center w-full max-w-md">
       {/* Payment success notification */}
@@ -152,7 +174,7 @@ export default function SignUpPage() {
       {!signupComplete && (
         <SignUp 
           appearance={{ 
-            baseTheme: theme === "dark" ? dark : undefined,
+            baseTheme: currentTheme === "dark" ? dark : undefined,
             elements: {
               rootBox: "w-full",
               card: "shadow-md rounded-lg"
@@ -216,5 +238,20 @@ export default function SignUpPage() {
         </Alert>
       )}
     </div>
+  );
+}
+
+// Wrap in Suspense boundary and export default
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col items-center w-full max-w-md">
+        <div className="w-full p-6 border border-gray-200 rounded-lg shadow-md bg-white text-center">
+          <Loader2 className="animate-spin h-8 w-8 mx-auto text-purple-600" />
+        </div>
+      </div>
+    }>
+      <SignUpContent />
+    </Suspense>
   );
 }

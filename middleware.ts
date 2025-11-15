@@ -11,6 +11,11 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
   
+  if (req.nextUrl.pathname.startsWith('/api/clerk/webhooks')) {
+    console.log("Skipping Clerk auth for Clerk webhook endpoint");
+    return NextResponse.next();
+  }
+  
   // Check for problematic URLs that might cause 431 errors
   // This covers both Clerk handshake params and payment provider redirects
   if (
@@ -76,7 +81,7 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
   matcher: [
     // Match all routes except for these:
-    "/((?!api/whop/webhooks|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api/whop/webhooks|api/clerk/webhooks|_next/static|_next/image|favicon.ico).*)",
     "/"
   ]
 };
