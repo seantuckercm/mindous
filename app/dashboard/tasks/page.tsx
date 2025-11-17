@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ProviderBadge, LLMProvider } from '@/components/llm/provider-badge';
 import { 
   Search, 
   Filter, 
@@ -27,12 +26,9 @@ interface TaskItem {
   id: string;
   title: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'paused';
-  provider: LLMProvider;
-  model: string;
   createdAt: Date;
   completedAt?: Date;
   cost: number;
-  tokens: number;
   subtasks: number;
   completedSubtasks: number;
 }
@@ -43,12 +39,9 @@ const mockTasks: TaskItem[] = [
     id: '1',
     title: 'Build React todo application with TypeScript',
     status: 'completed',
-    provider: 'openai',
-    model: 'gpt-4o-mini',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
     completedAt: new Date(Date.now() - 1000 * 60 * 30),
     cost: 2.34,
-    tokens: 15420,
     subtasks: 8,
     completedSubtasks: 8
   },
@@ -56,11 +49,8 @@ const mockTasks: TaskItem[] = [
     id: '2',
     title: 'Analyze customer feedback data and generate insights',
     status: 'running',
-    provider: 'anthropic',
-    model: 'claude-3-5-sonnet',
     createdAt: new Date(Date.now() - 1000 * 60 * 45),
     cost: 1.89,
-    tokens: 8950,
     subtasks: 5,
     completedSubtasks: 3
   },
@@ -68,12 +58,9 @@ const mockTasks: TaskItem[] = [
     id: '3',
     title: 'Write comprehensive API documentation',
     status: 'completed',
-    provider: 'abacus',
-    model: 'gpt-4',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
     completedAt: new Date(Date.now() - 1000 * 60 * 60 * 22),
     cost: 4.12,
-    tokens: 22350,
     subtasks: 12,
     completedSubtasks: 12
   },
@@ -81,11 +68,8 @@ const mockTasks: TaskItem[] = [
     id: '4',
     title: 'Create marketing campaign content',
     status: 'paused',
-    provider: 'google',
-    model: 'gemini-1.5-pro',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3),
     cost: 0.78,
-    tokens: 4200,
     subtasks: 6,
     completedSubtasks: 2
   },
@@ -93,11 +77,8 @@ const mockTasks: TaskItem[] = [
     id: '5',
     title: 'Refactor legacy codebase structure',
     status: 'failed',
-    provider: 'qwen',
-    model: 'qwen-max',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),
     cost: 1.23,
-    tokens: 6800,
     subtasks: 4,
     completedSubtasks: 1
   }
@@ -136,20 +117,18 @@ const getStatusColor = (status: string) => {
 export default function TasksPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [providerFilter, setProviderFilter] = useState<string>('all');
   const [activeTab, setActiveTab] = useState('all');
 
   const filteredTasks = mockTasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
-    const matchesProvider = providerFilter === 'all' || task.provider === providerFilter;
     
     if (activeTab !== 'all') {
       const matchesTab = activeTab === task.status;
-      return matchesSearch && matchesStatus && matchesProvider && matchesTab;
+      return matchesSearch && matchesStatus && matchesTab;
     }
     
-    return matchesSearch && matchesStatus && matchesProvider;
+    return matchesSearch && matchesStatus;
   });
 
   const taskCounts = {
@@ -165,9 +144,9 @@ export default function TasksPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Task Management</h1>
+          <h1 className="text-3xl font-bold">Tasks</h1>
           <p className="text-muted-foreground mt-1">
-            Monitor and manage all your multi-LLM task executions
+            Monitor and manage all your AI task executions
           </p>
         </div>
         <Button>
@@ -227,7 +206,7 @@ export default function TasksPage() {
             </div>
             
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="w-full md:w-[200px]">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -236,20 +215,6 @@ export default function TasksPage() {
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="paused">Paused</SelectItem>
                 <SelectItem value="failed">Failed</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={providerFilter} onValueChange={setProviderFilter}>
-              <SelectTrigger className="w-full md:w-[180px]">
-                <SelectValue placeholder="Filter by provider" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Providers</SelectItem>
-                <SelectItem value="abacus">Abacus AI</SelectItem>
-                <SelectItem value="openai">OpenAI</SelectItem>
-                <SelectItem value="anthropic">Anthropic</SelectItem>
-                <SelectItem value="google">Google</SelectItem>
-                <SelectItem value="qwen">Qwen</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -273,7 +238,7 @@ export default function TasksPage() {
                 <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No tasks found</h3>
                 <p className="text-muted-foreground">
-                  {searchQuery || statusFilter !== 'all' || providerFilter !== 'all'
+                  {searchQuery || statusFilter !== 'all'
                     ? 'Try adjusting your filters or search terms'
                     : 'Create your first task to get started'
                   }
@@ -301,15 +266,12 @@ export default function TasksPage() {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <ProviderBadge provider={task.provider} model={task.model} size="sm" />
-                          
                           <Badge className={getStatusColor(task.status)}>
                             {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
                           </Badge>
 
                           <div className="text-right">
                             <div className="text-sm font-medium">${task.cost.toFixed(2)}</div>
-                            <div className="text-xs text-muted-foreground">{task.tokens.toLocaleString()} tokens</div>
                           </div>
 
                           <Button variant="ghost" size="icon">

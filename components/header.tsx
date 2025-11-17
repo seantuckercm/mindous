@@ -30,10 +30,10 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 const navigation = [
-  { name: 'Workspace', href: '/dashboard', icon: Brain, description: 'Multi-LLM Task Orchestration' },
-  { name: 'Tasks', href: '/dashboard/tasks', icon: Layers, description: 'Task Management & History' },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'LLM Performance & Costs' },
-  { name: 'Tools', href: '/dashboard/tools', icon: Zap, description: 'Tool Registry & Management' },
+  { name: 'Workspace', href: '/dashboard', icon: Brain, description: 'AI-powered workspace' },
+  { name: 'Tasks', href: '/dashboard/tasks', icon: Layers, description: 'Task management & history' },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, description: 'Performance & insights' },
+  { name: 'Tools', href: '/dashboard/tools', icon: Zap, description: 'Tool registry & management' },
 ];
 
 export default function Header() {
@@ -54,14 +54,9 @@ export default function Header() {
             <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
               <Brain className="h-5 w-5 text-white" />
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Mindous.ai
-              </span>
-              <Badge variant="outline" className="text-xs hidden sm:inline-flex">
-                Multi-LLM
-              </Badge>
-            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Mindous.ai
+            </span>
           </Link>
 
           {/* Desktop Navigation - Only show when authenticated */}
