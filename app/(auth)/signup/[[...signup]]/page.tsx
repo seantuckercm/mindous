@@ -40,9 +40,9 @@ function SignUpContent() {
   const [isMounted, setIsMounted] = useState(false);
   
   // Extract email and token from URL params
-  const email = searchParams.get("email");
-  const token = searchParams.get("token");
-  const isPaymentSuccess = searchParams.get("payment") === "success";
+  const email = searchParams?.get("email");
+  const token = searchParams?.get("token");
+  const isPaymentSuccess = searchParams?.get("payment") === "success";
   
   // Determine the actual theme to use
   const currentTheme = theme === "system" ? systemTheme : theme;

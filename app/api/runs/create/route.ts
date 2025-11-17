@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db/db';
-import { tasksTable, executionsTable } from '@/db/schema';
+import { tasksTable, executionsTable, SelectTask } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 // Type for request body
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     }).returning();
 
     // Create subtasks if provided
-    let subtasks = [];
+    let subtasks: SelectTask[] = [];
     if (body.subtasks && body.subtasks.length > 0) {
       subtasks = await db.insert(tasksTable).values(
         body.subtasks.map((subtask, index) => ({

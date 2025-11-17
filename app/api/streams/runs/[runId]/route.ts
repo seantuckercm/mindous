@@ -218,7 +218,8 @@ export async function GET(
 if (typeof process !== "undefined") {
   process.on("SIGTERM", async () => {
     console.log("Cleaning up SSE connections...");
-    for (const [connectionId, { subscriber, controller }] of activeConnections.entries()) {
+    const connections = Array.from(activeConnections.entries());
+    for (const [connectionId, { subscriber, controller }] of connections) {
       try {
         controller.abort();
         await subscriber.quit();

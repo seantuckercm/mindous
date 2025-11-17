@@ -158,6 +158,11 @@ export async function PATCH(
         newExecutionStatus = 'cancelled';
         newTaskStatus = 'cancelled';
         break;
+      default:
+        return NextResponse.json(
+          { error: 'Invalid action' },
+          { status: 400 }
+        );
     }
 
     // Update execution status

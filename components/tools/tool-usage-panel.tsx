@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SelectToolRun, SelectTool } from '@/db/schema';
@@ -20,21 +20,7 @@ export function ToolUsagePanel({ workspaceId, executionId }: ToolUsagePanelProps
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadData();
-    
-    // Poll for updates every 5 seconds
-    const interval = setInterval(loadToolRuns, 5000);
-    return () => clearInterval(interval);
-  }, [executionId]);
-
-  const loadData = async () => {
-    setLoading(true);
-    await Promise.all([loadToolRuns(), loadTools()]);
-    setLoading(false);
-  };
-
-  const loadToolRuns = async () => {
+  const loadToolRuns = useCallback(async () => {
     try {
       const result = await getToolRunsForExecution(executionId);
       if (result.success && result.toolRuns) {
@@ -43,9 +29,9 @@ export function ToolUsagePanel({ workspaceId, executionId }: ToolUsagePanelProps
     } catch (err) {
       console.error('Failed to load tool runs:', err);
     }
-  };
+  }, [executionId]);
 
-  const loadTools = async () => {
+  const loadTools = useCallback(async () => {
     try {
       const result = await listTools(workspaceId);
       if (result.success && result.tools) {
@@ -58,7 +44,21 @@ export function ToolUsagePanel({ workspaceId, executionId }: ToolUsagePanelProps
     } catch (err) {
       console.error('Failed to load tools:', err);
     }
-  };
+  }, [workspaceId]);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    await Promise.all([loadToolRuns(), loadTools()]);
+    setLoading(false);
+  }, [loadToolRuns, loadTools]);
+
+  useEffect(() => {
+    loadData();
+    
+    // Poll for updates every 5 seconds
+    const interval = setInterval(loadToolRuns, 5000);
+    return () => clearInterval(interval);
+  }, [executionId, loadData, loadToolRuns]);
 
   const handleRefresh = async () => {
     setRefreshing(true);

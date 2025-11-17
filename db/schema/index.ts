@@ -8,3 +8,4 @@ export * from "./context";
 export * from "./llm-routing";
 export * from "./progress-stream-schema";
 export * from "./tools";
+export * from "./chat";

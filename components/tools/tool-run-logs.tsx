@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SelectToolRunEvent } from '@/db/schema';
@@ -18,9 +18,9 @@ export function ToolRunLogs({ toolRunId }: ToolRunLogsProps) {
 
   useEffect(() => {
     loadEvents();
-  }, [toolRunId]);
+  }, [toolRunId, loadEvents]);
 
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     try {
       setLoading(true);
       const result = await getToolRun(toolRunId);
@@ -33,7 +33,7 @@ export function ToolRunLogs({ toolRunId }: ToolRunLogsProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toolRunId]);
 
   const getLevelColor = (level: string) => {
     switch (level) {

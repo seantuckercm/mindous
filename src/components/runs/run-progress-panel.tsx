@@ -61,9 +61,9 @@ export function RunProgressPanel({
     if (!initialData) {
       fetchRunData();
     }
-  }, [runId, initialData]);
+  }, [runId, initialData, fetchRunData]);
 
-  const fetchRunData = async () => {
+  const fetchRunData = useCallback(async () => {
     setIsLoading(true);
     try {
       // TODO: Replace with actual API call
@@ -77,7 +77,7 @@ export function RunProgressPanel({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [runId]);
 
   // Calculate current task and subtask numbers
   const getCurrentProgress = useCallback(() => {

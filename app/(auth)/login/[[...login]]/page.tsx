@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 export default function LoginPage() {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
-  const redirectUrl = searchParams.get("redirect_url");
+  const redirectUrl = searchParams?.get("redirect_url");
 
   return (
     <div className="flex flex-col items-center justify-center w-full">

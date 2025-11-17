@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SelectTool } from '@/db/schema';
@@ -23,7 +23,7 @@ export function ToolRegistryView({ workspaceId, onToolSelect }: ToolRegistryView
 
   useEffect(() => {
     loadTools();
-  }, [workspaceId]);
+  }, [workspaceId, loadTools]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -38,7 +38,7 @@ export function ToolRegistryView({ workspaceId, onToolSelect }: ToolRegistryView
     }
   }, [searchQuery, tools]);
 
-  const loadTools = async () => {
+  const loadTools = useCallback(async () => {
     try {
       setLoading(true);
       const result = await listTools(workspaceId);
@@ -54,7 +54,7 @@ export function ToolRegistryView({ workspaceId, onToolSelect }: ToolRegistryView
     } finally {
       setLoading(false);
     }
-  };
+  }, [workspaceId]);
 
   if (loading) {
     return (

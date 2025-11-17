@@ -29,6 +29,13 @@
       "when": 1763355545723,
       "tag": "0003_condemned_veda",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763368507255,
+      "tag": "0004_loose_zarda",
+      "breakpoints": true
     }
   ]
 }
