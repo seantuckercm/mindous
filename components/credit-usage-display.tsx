@@ -47,12 +47,12 @@ export function CreditUsageDisplay() {
   }, []);
   
   // Calculate percentage used
-  const percentUsed = creditStatus.total > 0
+  const percentUsed = creditStatus && creditStatus.total > 0
     ? Math.min(100, Math.round((creditStatus.used / creditStatus.total) * 100))
     : 0;
     
   // Format credit renewal date - prioritize nextCreditRenewal over billing date
-  const renewalDate = creditStatus.nextCreditRenewal || creditStatus.nextBillingDate;
+  const renewalDate = creditStatus?.nextCreditRenewal || creditStatus?.nextBillingDate;
   const formattedDate = renewalDate 
     ? new Date(renewalDate).toLocaleDateString('en-US', {
         month: 'short',
@@ -62,7 +62,7 @@ export function CreditUsageDisplay() {
     : 'No renewal date';
   
   // Format membership type with proper capitalization
-  const membershipType = creditStatus.membership 
+  const membershipType = creditStatus?.membership 
     ? creditStatus.membership.charAt(0).toUpperCase() + creditStatus.membership.slice(1) 
     : 'Free';
   
@@ -92,10 +92,10 @@ export function CreditUsageDisplay() {
             <div className="grid gap-2 mb-2">
               <div className="flex items-center justify-between text-xs">
                 <div>
-                  <span className="font-medium">{creditStatus.used}</span> of <span className="font-medium">{creditStatus.total}</span> used
+                  <span className="font-medium">{creditStatus?.used || 0}</span> of <span className="font-medium">{creditStatus?.total || 0}</span> used
                 </div>
                 <div className="text-purple-600 font-medium">
-                  {creditStatus.remaining} left
+                  {creditStatus?.remaining || 0} left
                 </div>
               </div>
               <div className="h-2.5 w-full bg-gray-100 rounded-full">
@@ -106,7 +106,7 @@ export function CreditUsageDisplay() {
               </div>
             </div>
             
-            {creditStatus.error && (
+            {creditStatus?.error && (
               <div className="text-xs text-destructive mt-1">
                 {creditStatus.error}
               </div>
