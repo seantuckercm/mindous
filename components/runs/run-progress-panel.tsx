@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { useRunStream } from "@/components/progress/use-run-stream";
 import { pauseRun, cancelRun, resumeRun } from "@/actions/runs/control";
 import { useAuth } from "@clerk/nextjs";
+import { CodeDisplay } from "@/components/agent/code-display";
+import { PreviewFrame } from "@/components/agent/preview-frame";
 
 // Types for run and subtasks
 export interface Subtask {

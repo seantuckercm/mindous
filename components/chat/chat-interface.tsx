@@ -1,27 +1,27 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageList } from './message-list';
+import { MessageList, Message } from './message-list';
 import { MessageInput } from './message-input';
 import { Button } from '../ui/button';
 import { Plus, Settings, Brain } from 'lucide-react';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  createdAt: Date;
-}
+import { useAgentStream } from '@/lib/hooks/useAgentStream';
 
 interface ChatInterfaceProps {
   userId: string;
 }
 
+interface ActiveExecution {
+  executionId: string;
+  runId: string;
+  messageId: string;
+}
+
 export function ChatInterface({ userId }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [currentStreamingMessage, setCurrentStreamingMessage] = useState<string>('');
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [activeExecution, setActiveExecution] = useState<ActiveExecution | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Create new session on mount
@@ -51,10 +51,35 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, currentStreamingMessage]);
+  }, [messages]);
+
+  // Use agent stream hook if there's an active execution
+  const { state: agentState, isConnected } = useAgentStream({
+    runId: activeExecution?.runId || '',
+    executionId: activeExecution?.executionId || '',
+    onCompleted: () => {
+      console.log('✅ Agent execution completed');
+      setIsExecuting(false);
+    },
+    onError: (error) => {
+      console.error('❌ Agent execution error:', error);
+      setIsExecuting(false);
+    },
+  });
+
+  // Update agent message when state changes
+  useEffect(() => {
+    if (activeExecution && agentState) {
+      setMessages(prev => prev.map(msg => 
+        msg.id === activeExecution.messageId 
+          ? { ...msg, agentState }
+          : msg
+      ));
+    }
+  }, [agentState, activeExecution]);
 
   const handleSendMessage = async (content: string) => {
-    if (!sessionId || !content.trim()) return;
+    if (!sessionId || !content.trim() || isExecuting) return;
 
     // Add user message
     const userMessage: Message = {
@@ -64,82 +89,70 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       createdAt: new Date(),
     };
     setMessages(prev => [...prev, userMessage]);
-    setIsStreaming(true);
-    setCurrentStreamingMessage('');
+    setIsExecuting(true);
 
     try {
-      // Send message and handle streaming
-      const response = await fetch('/api/chat/message', {
+      // Start agent execution
+      const response = await fetch('/api/agent/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sessionId,
-          content,
+          prompt: content,
+          context: {
+            taskType: 'code',
+            complexity: 'medium',
+          },
         }),
       });
 
-      if (!response.body) {
-        throw new Error('No response body');
+      if (!response.ok) {
+        throw new Error('Failed to start agent execution');
       }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullContent = '';
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to start agent execution');
+      }
 
-      // Create placeholder message for streaming
-      const streamingMessageId = crypto.randomUUID();
-      setMessages(prev => [...prev, {
-        id: streamingMessageId,
-        role: 'assistant',
-        content: '',
+      // Create agent message placeholder
+      const agentMessageId = crypto.randomUUID();
+      const agentMessage: Message = {
+        id: agentMessageId,
+        role: 'agent',
+        content: 'Starting execution...',
         createdAt: new Date(),
-      }]);
+        agentState: {
+          runId: data.runId,
+          executionId: data.executionId,
+          status: 'planning',
+          progress: 0,
+          totalSteps: 0,
+          completedSteps: 0,
+          actions: [],
+          codeArtifacts: [],
+        },
+      };
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      setMessages(prev => [...prev, agentMessage]);
+      
+      // Set active execution
+      setActiveExecution({
+        executionId: data.executionId,
+        runId: data.runId,
+        messageId: agentMessageId,
+      });
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6));
-              if (data.type === 'chunk' && data.content) {
-                fullContent += data.content;
-                // Update the streaming message in real-time
-                setMessages(prev => prev.map(msg => 
-                  msg.id === streamingMessageId 
-                    ? { ...msg, content: fullContent }
-                    : msg
-                ));
-              } else if (data.type === 'done') {
-                // Final update
-                setMessages(prev => prev.map(msg => 
-                  msg.id === streamingMessageId 
-                    ? { ...msg, content: data.content }
-                    : msg
-                ));
-              }
-            } catch (e) {
-              // Skip invalid JSON
-            }
-          }
-        }
-      }
     } catch (error) {
       console.error('Failed to send message:', error);
       const errorMessage: Message = {
         id: crypto.randomUUID(),
         role: 'system',
-        content: 'Failed to process your request. Please try again.',
+        content: 'Failed to start agent execution. Please try again.',
         createdAt: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsStreaming(false);
-      setCurrentStreamingMessage('');
+      setIsExecuting(false);
     }
   };
 
@@ -152,15 +165,25 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
             <Brain className="h-6 w-6 text-blue-600" />
             <h1 className="text-2xl font-bold">Mindous AI</h1>
           </div>
-          {isStreaming && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          {isExecuting && (
+            <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              AI is thinking...
+              <span className="text-muted-foreground">
+                {agentState?.status === 'planning' && 'Planning execution...'}
+                {agentState?.status === 'executing' && 'Executing tasks...'}
+                {agentState?.status === 'building' && 'Building app...'}
+                {agentState?.status === 'deploying' && 'Deploying preview...'}
+              </span>
+              {isConnected && agentState?.progress > 0 && (
+                <span className="text-xs text-blue-500 font-medium">
+                  {agentState.progress}%
+                </span>
+              )}
             </div>
           )}
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={createNewSession}>
+          <Button variant="ghost" size="icon" onClick={createNewSession} disabled={isExecuting}>
             <Plus className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon">
@@ -179,8 +202,8 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       <div className="border-t px-6 py-4">
         <MessageInput 
           onSend={handleSendMessage} 
-          disabled={isStreaming}
-          placeholder="Ask me anything... I'll break it down and execute it for you."
+          disabled={isExecuting}
+          placeholder="Describe an app you want to build..."
         />
       </div>
     </div>
