@@ -1,9 +1,10 @@
+
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { Send } from 'lucide-react';
+import { useState, KeyboardEvent } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Send, Loader2 } from 'lucide-react';
 
 interface MessageInputProps {
   onSend: (message: string) => void;
@@ -11,59 +12,47 @@ interface MessageInputProps {
   placeholder?: string;
 }
 
-export function MessageInput({ onSend, disabled, placeholder }: MessageInputProps) {
+export function MessageInput({ onSend, disabled = false, placeholder = "Type your message..." }: MessageInputProps) {
   const [message, setMessage] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSend = () => {
     if (message.trim() && !disabled) {
       onSend(message.trim());
       setMessage('');
-      // Reset textarea height
-      if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
-      }
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e);
+      handleSend();
     }
   };
 
-  // Auto-resize textarea
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  }, [message]);
-
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 items-end">
-      <div className="flex-1 relative">
+    <div className="flex gap-3 items-end">
+      <div className="flex-1">
         <Textarea
-          ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder || 'Type a message...'}
+          placeholder={placeholder}
           disabled={disabled}
-          className="min-h-[52px] max-h-[200px] resize-none pr-12"
-          rows={1}
+          className="min-h-[60px] max-h-[200px] resize-none border-2 focus:border-blue-300 transition-colors"
+          rows={2}
         />
       </div>
-      <Button 
-        type="submit" 
-        size="icon"
+      <Button
+        onClick={handleSend}
         disabled={disabled || !message.trim()}
-        className="h-[52px] w-[52px]"
+        className="px-4 py-2 h-[60px] bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
       >
-        <Send className="h-4 w-4" />
+        {disabled ? (
+          <Loader2 className="h-5 w-5 animate-spin" />
+        ) : (
+          <Send className="h-5 w-5" />
+        )}
       </Button>
-    </form>
+    </div>
   );
 }

@@ -1,8 +1,9 @@
+
 'use client';
 
-import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback } from '../ui/avatar';
-import { User, Bot } from 'lucide-react';
+import { format } from 'date-fns';
+import { User, Bot, AlertTriangle } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface Message {
   id: string;
@@ -18,71 +19,68 @@ interface MessageListProps {
 export function MessageList({ messages }: MessageListProps) {
   if (messages.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center">
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Bot className="w-8 h-8 text-primary" />
+      <div className="flex-1 flex items-center justify-center text-muted-foreground">
+        <div className="text-center space-y-3">
+          <Bot className="h-12 w-12 mx-auto opacity-50" />
+          <div>
+            <p className="text-lg font-medium">Ready to help!</p>
+            <p className="text-sm">Ask me anything and I&apos;ll break it down into actionable steps.</p>
+          </div>
         </div>
-        <h2 className="text-2xl font-semibold mb-2">Welcome to Mindous</h2>
-        <p className="text-muted-foreground max-w-md">
-          I'm your AI agent orchestrator. Describe any complex task and I'll break it down into subtasks and execute them for you.
-        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {messages.map((message) => (
-        <MessageItem key={message.id} message={message} />
+        <div
+          key={message.id}
+          className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+        >
+          {message.role !== 'user' && (
+            <div className="flex-shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                {message.role === 'assistant' ? (
+                  <Bot className="h-4 w-4 text-blue-600" />
+                ) : (
+                  <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                )}
+              </div>
+            </div>
+          )}
+          
+          <div className={`max-w-[80%] ${message.role === 'user' ? 'order-2' : ''}`}>
+            <Card className={`${message.role === 'user' 
+              ? 'bg-blue-600 text-white border-blue-600' 
+              : message.role === 'system'
+              ? 'bg-yellow-50 border-yellow-200'
+              : 'bg-white'
+            }`}>
+              <CardContent className="p-4">
+                <div className="prose prose-sm max-w-none">
+                  <div className="whitespace-pre-wrap break-words">
+                    {message.content}
+                  </div>
+                </div>
+                <div className={`text-xs mt-2 opacity-70 ${
+                  message.role === 'user' ? 'text-blue-100' : 'text-muted-foreground'
+                }`}>
+                  {format(message.createdAt, 'HH:mm')}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {message.role === 'user' && (
+            <div className="flex-shrink-0 mt-1 order-3">
+              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                <User className="h-4 w-4 text-gray-600" />
+              </div>
+            </div>
+          )}
+        </div>
       ))}
-    </div>
-  );
-}
-
-function MessageItem({ message }: { message: Message }) {
-  const isUser = message.role === 'user';
-  const isSystem = message.role === 'system';
-
-  if (isSystem) {
-    return (
-      <div className="flex justify-center">
-        <div className="bg-muted px-4 py-2 rounded-lg text-sm text-muted-foreground">
-          {message.content}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={cn(
-      'flex gap-4',
-      isUser && 'flex-row-reverse'
-    )}>
-      <Avatar className="w-8 h-8">
-        <AvatarFallback className={cn(
-          isUser ? 'bg-blue-500' : 'bg-purple-500',
-          'text-white'
-        )}>
-          {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
-        </AvatarFallback>
-      </Avatar>
-      
-      <div className={cn(
-        'flex flex-col max-w-[70%]',
-        isUser && 'items-end'
-      )}>
-        <div className={cn(
-          'rounded-lg px-4 py-3',
-          isUser 
-            ? 'bg-blue-500 text-white' 
-            : 'bg-muted border'
-        )}>
-          <p className="whitespace-pre-wrap">{message.content}</p>
-        </div>
-        <span className="text-xs text-muted-foreground mt-1">
-          {message.createdAt.toLocaleTimeString()}
-        </span>
-      </div>
     </div>
   );
 }

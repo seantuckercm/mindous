@@ -1,9 +1,11 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { chatMessages, agentRuns, agentSubtasks } from '@/db/schema/chat';
+import { chatMessages, chatSessions } from '@/db/schema/chat';
 import { auth } from '@clerk/nextjs/server';
-import { decomposeTask } from '@/lib/agents/task-decomposer';
-import { routeAndExecute } from '@/lib/llm/router';
+import { eq } from 'drizzle-orm';
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
@@ -13,145 +15,138 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body = await req.json();
-    const { sessionId, content } = body;
+    const { sessionId, content } = await req.json();
 
-    // Save user message
-    const [userMessage] = await db.insert(chatMessages).values({
+    // Verify session belongs to user
+    const [session] = await db.select().from(chatSessions)
+      .where(eq(chatSessions.id, sessionId))
+      .limit(1);
+
+    if (!session || session.userId !== userId) {
+      return NextResponse.json({ error: 'Session not found' }, { status: 404 });
+    }
+
+    // Save user message to database
+    await db.insert(chatMessages).values({
       sessionId,
       role: 'user',
       content,
-    }).returning();
-
-    // Create agent run
-    const [agentRun] = await db.insert(agentRuns).values({
-      sessionId,
-      messageId: userMessage.id,
-      status: 'running',
-      startedAt: new Date(),
-    }).returning();
-
-    // Start task decomposition and execution in background
-    executeAgentRun(agentRun.id, content).catch(console.error);
-
-    // Return initial response
-    const response = 'I\'m analyzing your request and breaking it down into subtasks...';
-    
-    await db.insert(chatMessages).values({
-      sessionId,
-      role: 'assistant',
-      content: response,
     });
 
-    return NextResponse.json({
-      agentRunId: agentRun.id,
-      response,
+    // Get recent conversation context (last 10 messages)
+    const recentMessages = await db.select()
+      .from(chatMessages)
+      .where(eq(chatMessages.sessionId, sessionId))
+      .orderBy(chatMessages.createdAt)
+      .limit(10);
+
+    // Prepare messages for LLM
+    const messages = recentMessages.map(msg => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content
+    }));
+
+    // Add system message for task breakdown context
+    messages.unshift({
+      role: 'system' as const,
+      content: `You are Mindous.ai, an AI assistant that helps break down complex tasks into manageable subtasks and executes them. When a user gives you a task:
+1. Analyze the request and break it down into clear, actionable subtasks
+2. Explain your approach and the steps you'll take
+3. Execute the plan step by step
+4. Provide clear, helpful responses
+
+Always be conversational, helpful, and focused on practical solutions.`
     });
+
+    // Call LLM API with streaming
+    const response = await fetch('https://apps.abacus.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.ABACUSAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4.1-mini',
+        messages,
+        stream: true,
+        max_tokens: 2000,
+        temperature: 0.7
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`LLM API error: ${response.status}`);
+    }
+
+    // Create streaming response
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+        const encoder = new TextEncoder();
+        
+        let fullContent = '';
+        
+        try {
+          while (true) {
+            const { done, value } = await reader?.read() || { done: true, value: undefined };
+            if (done) break;
+            
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') continue;
+                
+                try {
+                  const parsed = JSON.parse(data);
+                  const content = parsed.choices?.[0]?.delta?.content || '';
+                  if (content) {
+                    fullContent += content;
+                    // Stream the chunk to the client
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content, type: 'chunk' })}\n\n`));
+                  }
+                } catch (e) {
+                  // Skip invalid JSON
+                }
+              }
+            }
+          }
+          
+          // Save assistant response to database
+          await db.insert(chatMessages).values({
+            sessionId,
+            role: 'assistant',
+            content: fullContent,
+          });
+          
+          // Send completion signal
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'done', content: fullContent })}\n\n`));
+          
+        } catch (error) {
+          console.error('Stream error:', error);
+          controller.error(error);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
+
   } catch (error) {
-    console.error('Failed to process message:', error);
+    console.error('Chat error:', error);
     return NextResponse.json(
       { error: 'Failed to process message' },
       { status: 500 }
     );
   }
-}
-
-async function executeAgentRun(runId: string, userRequest: string) {
-  try {
-    // Step 1: Decompose task into subtasks
-    const decomposition = await decomposeTask(userRequest);
-    
-    // Step 2: Create subtasks in database
-    for (let i = 0; i < decomposition.subtasks.length; i++) {
-      const subtask = decomposition.subtasks[i];
-      await db.insert(agentSubtasks).values({
-        runId,
-        title: subtask.title,
-        description: subtask.description,
-        orderIndex: i,
-        status: 'pending',
-      });
-    }
-
-    // Step 3: Execute subtasks sequentially
-    const subtasks = await db.query.agentSubtasks.findMany({
-      where: (fields, { eq }) => eq(fields.runId, runId),
-      orderBy: (fields, { asc }) => [asc(fields.orderIndex)],
-    });
-
-    for (const subtask of subtasks) {
-      // Update subtask status to running
-      await db.update(agentSubtasks)
-        .set({ status: 'running', startedAt: new Date() })
-        .where((fields, { eq }) => eq(fields.id, subtask.id));
-
-      try {
-        // Route and execute subtask using LLM
-        const result = await routeAndExecute({
-          subtaskId: subtask.id,
-          prompt: `${subtask.title}\n\n${subtask.description || ''}`,
-          context: {
-            taskType: determineTaskType(subtask.title),
-            complexity: 'medium',
-            allowCache: true,
-          },
-        });
-
-        // Update subtask with result
-        await db.update(agentSubtasks)
-          .set({
-            status: 'completed',
-            provider: result.provider,
-            model: result.model,
-            result: { content: result.content },
-            finishedAt: new Date(),
-          })
-          .where((fields, { eq }) => eq(fields.id, subtask.id));
-      } catch (error: any) {
-        // Mark subtask as failed
-        await db.update(agentSubtasks)
-          .set({
-            status: 'failed',
-            error: error.message,
-            finishedAt: new Date(),
-          })
-          .where((fields, { eq }) => eq(fields.id, subtask.id));
-      }
-    }
-
-    // Step 4: Mark agent run as completed
-    await db.update(agentRuns)
-      .set({
-        status: 'completed',
-        finishedAt: new Date(),
-      })
-      .where((fields, { eq }) => eq(fields.id, runId));
-
-  } catch (error: any) {
-    // Mark agent run as failed
-    await db.update(agentRuns)
-      .set({
-        status: 'failed',
-        error: error.message,
-        finishedAt: new Date(),
-      })
-      .where((fields, { eq }) => eq(fields.id, runId));
-  }
-}
-
-function determineTaskType(title: string): 'code' | 'writing' | 'analysis' | 'extraction' | 'reasoning' {
-  const lower = title.toLowerCase();
-  if (lower.includes('code') || lower.includes('program') || lower.includes('implement')) {
-    return 'code';
-  }
-  if (lower.includes('write') || lower.includes('draft') || lower.includes('compose')) {
-    return 'writing';
-  }
-  if (lower.includes('analyze') || lower.includes('examine') || lower.includes('study')) {
-    return 'analysis';
-  }
-  if (lower.includes('extract') || lower.includes('scrape') || lower.includes('collect')) {
-    return 'extraction';
-  }
-  return 'reasoning';
 }

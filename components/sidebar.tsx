@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { Home, Settings, Database, Target, Users, Sparkles, CreditCard } from "lucide-react";
+import { Home, Settings, MessageSquare, FileText, BarChart3, Sparkles, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -41,11 +41,11 @@ export default function Sidebar({ profile, userEmail, whopMonthlyPlanId, whopYea
   // Plan IDs now come from props, not environment variables
   
   const navItems = [
-    { href: "/dashboard", icon: <Home size={16} />, label: "Home" },
+    { href: "/dashboard", icon: <Home size={16} />, label: "Workspace" },
+    { href: "/chat", icon: <MessageSquare size={16} />, label: "Chat" },
+    { href: "/dashboard/tasks", icon: <FileText size={16} />, label: "Tasks" },
+    { href: "/dashboard/analytics", icon: <BarChart3 size={16} />, label: "Analytics" },
     { href: "/dashboard/settings", icon: <Settings size={16} />, label: "Settings" },
-    { href: "/dashboard/data-source", icon: <Database size={16} />, label: "Data source" },
-    { href: "/dashboard/targets", icon: <Target size={16} />, label: "Targets" },
-    { href: "/dashboard/members", icon: <Users size={16} />, label: "Members" },
   ];
 
   // Handle navigation item click
@@ -107,10 +107,10 @@ export default function Sidebar({ profile, userEmail, whopMonthlyPlanId, whopYea
               transition={{ duration: 0.2 }}
             >
               <div className="hidden md:block">
-                <span className="font-bold text-lg">App Name</span>
+                <span className="font-bold text-lg">Mindous</span>
               </div>
               <div className="block md:hidden text-center">
-                <span className="font-bold text-sm">A</span>
+                <span className="font-bold text-sm">M</span>
               </div>
             </motion.div>
           </Link>

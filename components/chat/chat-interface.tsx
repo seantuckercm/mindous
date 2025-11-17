@@ -3,10 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageList } from './message-list';
 import { MessageInput } from './message-input';
-import { TaskCard } from '../runs/task-card';
-import { StatusBar } from '../runs/status-bar';
 import { Button } from '../ui/button';
-import { Plus, Settings } from 'lucide-react';
+import { Plus, Settings, Brain } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -15,29 +13,21 @@ interface Message {
   createdAt: Date;
 }
 
-interface AgentTask {
-  id: string;
-  title: string;
-  status: 'queued' | 'running' | 'completed' | 'failed';
-  statusDetail?: string;
-  currentSubtask?: number;
-  totalSubtasks?: number;
-}
-
 interface ChatInterfaceProps {
   userId: string;
 }
 
 export function ChatInterface({ userId }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [currentTask, setCurrentTask] = useState<AgentTask | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [currentStreamingMessage, setCurrentStreamingMessage] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Create new session on mount
   useEffect(() => {
     createNewSession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createNewSession = async () => {
@@ -49,6 +39,7 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       });
       const data = await res.json();
       setSessionId(data.sessionId);
+      setMessages([]);
     } catch (error) {
       console.error('Failed to create session:', error);
     }
@@ -60,7 +51,7 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, currentStreamingMessage]);
 
   const handleSendMessage = async (content: string) => {
     if (!sessionId || !content.trim()) return;
@@ -74,35 +65,68 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
     };
     setMessages(prev => [...prev, userMessage]);
     setIsStreaming(true);
+    setCurrentStreamingMessage('');
 
     try {
-      // Send message and start agent orchestration
-      const res = await fetch('/api/chat/message', {
+      // Send message and handle streaming
+      const response = await fetch('/api/chat/message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId,
-          userId,
           content,
         }),
       });
 
-      const data = await res.json();
-      
-      // Start task monitoring
-      if (data.agentRunId) {
-        monitorAgentRun(data.agentRunId);
+      if (!response.body) {
+        throw new Error('No response body');
       }
 
-      // Add assistant response
-      if (data.response) {
-        const assistantMessage: Message = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: data.response,
-          createdAt: new Date(),
-        };
-        setMessages(prev => [...prev, assistantMessage]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullContent = '';
+
+      // Create placeholder message for streaming
+      const streamingMessageId = crypto.randomUUID();
+      setMessages(prev => [...prev, {
+        id: streamingMessageId,
+        role: 'assistant',
+        content: '',
+        createdAt: new Date(),
+      }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.type === 'chunk' && data.content) {
+                fullContent += data.content;
+                // Update the streaming message in real-time
+                setMessages(prev => prev.map(msg => 
+                  msg.id === streamingMessageId 
+                    ? { ...msg, content: fullContent }
+                    : msg
+                ));
+              } else if (data.type === 'done') {
+                // Final update
+                setMessages(prev => prev.map(msg => 
+                  msg.id === streamingMessageId 
+                    ? { ...msg, content: data.content }
+                    : msg
+                ));
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+        }
       }
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -115,35 +139,8 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsStreaming(false);
+      setCurrentStreamingMessage('');
     }
-  };
-
-  const monitorAgentRun = async (runId: string) => {
-    // Poll for agent run updates
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(`/api/agent/run/${runId}`);
-        const data = await res.json();
-        
-        setCurrentTask({
-          id: data.id,
-          title: data.title || 'Processing your request...',
-          status: data.status,
-          statusDetail: data.statusDetail,
-          currentSubtask: data.currentSubtask,
-          totalSubtasks: data.totalSubtasks,
-        });
-
-        // Stop polling when completed
-        if (['completed', 'failed'].includes(data.status)) {
-          clearInterval(interval);
-          setCurrentTask(null);
-        }
-      } catch (error) {
-        console.error('Failed to fetch run status:', error);
-        clearInterval(interval);
-      }
-    }, 1000);
   };
 
   return (
@@ -151,11 +148,14 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">Mindous Chat</h1>
-          {currentTask && (
+          <div className="flex items-center gap-2">
+            <Brain className="h-6 w-6 text-blue-600" />
+            <h1 className="text-2xl font-bold">Mindous AI</h1>
+          </div>
+          {isStreaming && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              Agent is working...
+              AI is thinking...
             </div>
           )}
         </div>
@@ -169,31 +169,11 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
         </div>
       </div>
 
-      {/* Active Task Card */}
-      {currentTask && (
-        <div className="px-6 py-4 border-b bg-muted/30">
-          <TaskCard
-            title={currentTask.title}
-            status={currentTask.status}
-            statusDetail={currentTask.statusDetail}
-          />
-        </div>
-      )}
-
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         <MessageList messages={messages} />
         <div ref={messagesEndRef} />
       </div>
-
-      {/* Status Bar */}
-      {currentTask && (
-        <StatusBar
-          currentTask={1}
-          currentSubtask={currentTask.currentSubtask || 0}
-          totalSubtasks={currentTask.totalSubtasks || 0}
-        />
-      )}
 
       {/* Message Input */}
       <div className="border-t px-6 py-4">
