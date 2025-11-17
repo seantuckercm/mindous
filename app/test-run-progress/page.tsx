@@ -302,7 +302,7 @@ export default function TestRunProgressPage() {
           <CardContent className="space-y-2 text-sm text-muted-foreground">
             <p>1. Fill in the task title and description above</p>
             <p>2. Add or modify subtasks as needed</p>
-            <p>3. Click "Create and Start Run" to create a new run in the database</p>
+            <p>3. Click &quot;Create and Start Run&quot; to create a new run in the database</p>
             <p>4. The run will appear below with real-time data from Supabase</p>
             <p>5. Use the Pause, Cancel, and Resume buttons to test the API endpoints</p>
             <p>6. Check the browser console and network tab for API responses</p>

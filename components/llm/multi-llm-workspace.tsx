@@ -389,7 +389,7 @@ export function MultiLLMWorkspace() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Today's Usage</CardTitle>
+                  <CardTitle className="text-base">Today&apos;s Usage</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between text-sm">

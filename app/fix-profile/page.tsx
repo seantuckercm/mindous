@@ -81,7 +81,7 @@ export default function FixProfilePage() {
       } else {
         setResult({
           success: false,
-          message: "No profile found. Click 'Create Profile' to fix this.",
+          message: "No profile found. Click &apos;Create Profile&apos; to fix this.",
         });
       }
     } catch (error) {
@@ -218,7 +218,7 @@ export default function FixProfilePage() {
             <p className="font-semibold">What does this page do?</p>
             <ul className="list-disc list-inside space-y-1">
               <li>Checks if your profile exists in the database</li>
-              <li>Creates a profile if one doesn't exist</li>
+              <li>Creates a profile if one doesn&apos;t exist</li>
               <li>Fixes sync issues between Clerk and Supabase</li>
               <li>Assigns free tier membership (5 credits)</li>
             </ul>
