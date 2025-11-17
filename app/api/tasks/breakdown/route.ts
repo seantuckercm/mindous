@@ -67,7 +67,12 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    const breakdown = JSON.parse(data.choices[0].message.content);
+    let content = data.choices[0].message.content;
+    
+    // Remove markdown code blocks if present
+    content = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    
+    const breakdown = JSON.parse(content);
 
     // Add status to each subtask
     breakdown.subtasks = breakdown.subtasks.map((task: any) => ({
