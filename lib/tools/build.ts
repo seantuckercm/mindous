@@ -1,30 +1,60 @@
 
 import { type ToolManifest } from '@/db/schema';
-import { spawn } from 'child_process';
+import { BuildService, ProjectSpec } from '@/lib/services/build-service';
+import { DeployService } from '@/lib/services/deploy-service';
 
 /**
  * Build Tool
- * Builds Next.js/React projects
+ * Builds Next.js/React projects using BuildService
  */
 export const buildToolManifest: ToolManifest = {
   key: 'build_tool',
-  version: '1.0.0',
-  description: 'Build Next.js, React, or other JavaScript projects',
+  version: '2.0.0',
+  description: 'Build and deploy Next.js, React, or other JavaScript projects',
   inputSchema: {
     type: 'object',
-    required: ['projectPath'],
+    required: ['runId', 'projectName'],
     properties: {
-      projectPath: {
+      runId: {
         type: 'string',
-        description: 'Path to the project directory'
+        description: 'Run ID for this build'
       },
-      buildCommand: {
+      executionId: {
         type: 'string',
-        description: 'Build command to execute (default: "npm run build")'
+        description: 'Execution ID (optional)'
       },
-      installDependencies: {
+      userId: {
+        type: 'string',
+        description: 'User ID'
+      },
+      projectName: {
+        type: 'string',
+        description: 'Name of the project'
+      },
+      projectType: {
+        type: 'string',
+        enum: ['nextjs', 'react', 'html', 'nodejs', 'other'],
+        description: 'Type of project to build'
+      },
+      files: {
+        type: 'array',
+        description: 'Files to generate',
+        items: {
+          type: 'object',
+          properties: {
+            path: { type: 'string' },
+            content: { type: 'string' }
+          },
+          required: ['path', 'content']
+        }
+      },
+      dependencies: {
+        type: 'object',
+        description: 'Additional npm dependencies'
+      },
+      autoDeploy: {
         type: 'boolean',
-        description: 'Whether to install dependencies before building'
+        description: 'Automatically deploy after build'
       }
     },
     additionalProperties: false
@@ -36,9 +66,21 @@ export const buildToolManifest: ToolManifest = {
         type: 'boolean',
         description: 'Whether the build succeeded'
       },
-      output: {
+      buildId: {
         type: 'string',
-        description: 'Build output logs'
+        description: 'Build ID'
+      },
+      buildPath: {
+        type: 'string',
+        description: 'Build directory path'
+      },
+      outputPath: {
+        type: 'string',
+        description: 'Build output path'
+      },
+      logs: {
+        type: 'string',
+        description: 'Build logs'
       },
       error: {
         type: 'string',
@@ -47,6 +89,10 @@ export const buildToolManifest: ToolManifest = {
       durationMs: {
         type: 'number',
         description: 'Build duration in milliseconds'
+      },
+      previewUrl: {
+        type: 'string',
+        description: 'Preview URL (if autoDeploy is true)'
       }
     },
     required: ['success']
@@ -57,7 +103,7 @@ export const buildToolManifest: ToolManifest = {
     cpuShares: 512
   },
   container: {
-    image: 'mindous/tool-build:1.0.0',
+    image: 'mindous/tool-build:2.0.0',
     cmd: ['node', 'index.js'],
     argsTemplate: ['--input', '/work/input.json', '--output', '/work/output.json']
   },
@@ -72,74 +118,93 @@ export const buildToolManifest: ToolManifest = {
 };
 
 /**
- * Execute build tool
+ * Execute build tool with BuildService integration
  */
 export async function executeBuild(input: {
-  projectPath: string;
-  buildCommand?: string;
-  installDependencies?: boolean;
-}): Promise<{ success: boolean; output: string; error?: string; durationMs: number }> {
+  runId: string;
+  executionId?: string;
+  userId: string;
+  projectName: string;
+  projectType?: 'nextjs' | 'react' | 'html' | 'nodejs' | 'other';
+  files?: Array<{ path: string; content: string }>;
+  dependencies?: Record<string, string>;
+  metadata?: any;
+  autoDeploy?: boolean;
+}): Promise<{
+  success: boolean;
+  buildId?: string;
+  buildPath?: string;
+  outputPath?: string;
+  logs?: string;
+  error?: string;
+  durationMs: number;
+  previewUrl?: string;
+  previewPort?: number;
+}> {
   const startTime = Date.now();
-  const buildCommand = input.buildCommand || 'npm run build';
 
   try {
-    // Install dependencies if requested
-    if (input.installDependencies) {
-      console.log('Installing dependencies...');
-      await executeCommand('npm install', input.projectPath);
+    console.log(`🔨 Building project: ${input.projectName}`);
+
+    // Create project spec
+    const spec: ProjectSpec = {
+      runId: input.runId,
+      executionId: input.executionId,
+      userId: input.userId,
+      projectName: input.projectName,
+      projectType: input.projectType || 'nextjs',
+      files: input.files || [],
+      dependencies: input.dependencies || {},
+      metadata: input.metadata || {}
+    };
+
+    // Create and build project
+    const buildId = await BuildService.createProject(spec);
+    const buildResult = await BuildService.buildProject(buildId, input.runId);
+
+    // Auto-deploy if requested and build succeeded
+    let previewUrl: string | undefined;
+    let previewPort: number | undefined;
+    
+    if (input.autoDeploy && buildResult.success) {
+      try {
+        console.log(`🚀 Auto-deploying preview...`);
+        const preview = await DeployService.deployPreview({
+          buildId,
+          runId: input.runId,
+          buildPath: buildResult.buildPath
+        });
+        previewUrl = preview.previewUrl;
+        previewPort = preview.port;
+        console.log(`✅ Preview deployed: ${previewUrl}`);
+      } catch (deployError: any) {
+        console.error('Auto-deploy failed:', deployError);
+        // Continue even if deploy fails
+      }
     }
 
-    // Run build command
-    console.log(`Running build command: ${buildCommand}`);
-    const output = await executeCommand(buildCommand, input.projectPath);
+    const durationMs = Date.now() - startTime;
 
     return {
-      success: true,
-      output,
-      durationMs: Date.now() - startTime
+      success: buildResult.success,
+      buildId,
+      buildPath: buildResult.buildPath,
+      outputPath: buildResult.outputPath,
+      logs: buildResult.logs,
+      error: buildResult.error,
+      durationMs,
+      previewUrl,
+      previewPort
     };
+
   } catch (error: any) {
+    const durationMs = Date.now() - startTime;
+    console.error('Build execution failed:', error);
+    
     return {
       success: false,
-      output: error.stdout || '',
-      error: error.stderr || error.message,
-      durationMs: Date.now() - startTime
+      error: error.message,
+      durationMs
     };
   }
-}
-
-/**
- * Helper to execute shell commands
- */
-function executeCommand(command: string, cwd: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const [cmd, ...args] = command.split(' ');
-    const process = spawn(cmd, args, { cwd, shell: true });
-
-    let stdout = '';
-    let stderr = '';
-
-    process.stdout.on('data', (data) => {
-      stdout += data.toString();
-    });
-
-    process.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    process.on('close', (code) => {
-      if (code === 0) {
-        resolve(stdout);
-      } else {
-        const error: any = new Error(`Command failed with code ${code}`);
-        error.stdout = stdout;
-        error.stderr = stderr;
-        reject(error);
-      }
-    });
-
-    process.on('error', (error) => {
-      reject(error);
-    });
-  });
 }

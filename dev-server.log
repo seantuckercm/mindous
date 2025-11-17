@@ -315,3 +315,103 @@ Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
  GET / 200 in 53ms
  GET / 200 in 51ms
  GET / 200 in 59ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard/settings 200 in 555ms
+ GET / 200 in 48ms
+ GET / 200 in 51ms
+ GET / 200 in 51ms
+ GET / 200 in 48ms
+ GET / 200 in 53ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard/settings 200 in 619ms
+ GET / 200 in 56ms
+ GET / 200 in 53ms
+ GET / 200 in 51ms
+ GET / 200 in 60ms
+ GET / 200 in 55ms
+ GET / 200 in 50ms
+ ✓ Compiled in 763ms (1032 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 657ms
+ GET / 200 in 57ms
+ GET / 200 in 57ms
+ ✓ Compiled in 1540ms (2840 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 1900ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 693ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 747ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 811ms
+ GET / 200 in 84ms
+ ✓ Compiled in 1443ms (2840 modules)
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 644ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 1835ms
+Dashboard profile: {
+  userId: 'user_35Scncoge2wvzdp0l48thxbzppM',
+  membership: 'free',
+  createdAt: 2025-11-15T00:39:31.865Z,
+  usageCredits: 5
+}
+ GET /dashboard/settings?_rsc=k0ydc 200 in 681ms
+ GET / 200 in 83ms
+ GET / 200 in 66ms
+Looking up profile by user ID: user_35Scncoge2wvzdp0l48thxbzppM
+ POST /dashboard/settings 200 in 524ms
+ GET / 200 in 92ms
+ GET / 200 in 76ms
+ GET / 200 in 65ms

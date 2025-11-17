@@ -179,18 +179,36 @@ export class EventPublisher {
   }
 
   /**
+   * Publish build event
+   */
+  static async publishBuildEvent(
+    runId: string,
+    buildId: string,
+    eventType: AgentEventType,
+    message: string,
+    data?: any
+  ): Promise<void> {
+    await this.publishEvent({
+      runId,
+      eventType,
+      message,
+      data: { buildId, ...data },
+    });
+  }
+
+  /**
    * Publish build log event
    */
   static async publishBuildLog(
     runId: string,
-    log: string,
-    data?: { buildId: string }
+    buildId: string,
+    log: string
   ): Promise<void> {
     await this.publishEvent({
       runId,
       eventType: 'BUILD_LOG',
       message: log,
-      data,
+      data: { buildId, log },
     });
   }
 

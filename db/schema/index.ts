@@ -12,3 +12,4 @@ export * from "./chat";
 export * from "./builds";
 export * from "./code-generations";
 export * from "./execution-state";
+export * from "./preview-deployments";
