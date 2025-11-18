@@ -19,3 +19,8 @@ out
 .logs
 *.tsbuildinfo
 core
+
+# Environment files
+.env
+.env.local
+.env.*.local
