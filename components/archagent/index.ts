@@ -1,6 +1,6 @@
 /**
  * ArchAgent Components
- * Phase 1 Implementation - Transparency and User Control Features
+ * Phase 2 Implementation - Full Feature Set with Real-time Monitoring
  */
 
 import dynamic from 'next/dynamic';
@@ -14,6 +14,22 @@ export const TerminalViewer = dynamic(
 );
 
 export { FileBrowser } from './file-browser';
+
+// Export Phase 2 components with SSR disabled
+export const DesktopViewer = dynamic(
+  () => import('./desktop-viewer').then(mod => ({ default: mod.DesktopViewer })),
+  { ssr: false }
+);
+
+export const CodeDiffViewer = dynamic(
+  () => import('./code-diff-viewer').then(mod => ({ default: mod.CodeDiffViewer })),
+  { ssr: false }
+);
+
+export const DatabaseViewer = dynamic(
+  () => import('./database-viewer').then(mod => ({ default: mod.DatabaseViewer })),
+  { ssr: false }
+);
 
 // Export Workspace components with SSR disabled (they use TerminalViewer)
 export const ArchAgentWorkspace = dynamic(

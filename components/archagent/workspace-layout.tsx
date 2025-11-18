@@ -19,6 +19,9 @@ import {
 } from 'lucide-react';
 import { TerminalViewer } from './terminal-viewer';
 import { FileBrowser } from './file-browser';
+import { DesktopViewer } from './desktop-viewer';
+import { CodeDiffViewer } from './code-diff-viewer';
+import { DatabaseViewer } from './database-viewer';
 import { cn } from '@/lib/utils';
 import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from '@/components/ui/resizable';
 
@@ -46,8 +49,8 @@ export function ArchAgentWorkspace({ runId, buildId, chatPanel, className }: Wor
               </div>
               <span>ArchAgent</span>
             </div>
-            <Badge variant="outline" className="ml-2">
-              Phase 1
+            <Badge variant="default" className="ml-2 bg-gradient-to-r from-purple-500 to-pink-500">
+              Phase 2
             </Badge>
           </div>
           
@@ -97,23 +100,14 @@ export function ArchAgentWorkspace({ runId, buildId, chatPanel, className }: Wor
                     <TabsTrigger value="code-diff" className="gap-2">
                       <FileCode className="h-4 w-4" />
                       Code Diff
-                      <Badge variant="secondary" className="ml-1 text-xs">
-                        Coming Soon
-                      </Badge>
                     </TabsTrigger>
                     <TabsTrigger value="database" className="gap-2">
                       <Database className="h-4 w-4" />
                       Database
-                      <Badge variant="secondary" className="ml-1 text-xs">
-                        Coming Soon
-                      </Badge>
                     </TabsTrigger>
                     <TabsTrigger value="desktop" className="gap-2">
                       <Monitor className="h-4 w-4" />
                       Desktop Stream
-                      <Badge variant="secondary" className="ml-1 text-xs">
-                        Coming Soon
-                      </Badge>
                     </TabsTrigger>
                   </TabsList>
                 </div>
@@ -124,42 +118,15 @@ export function ArchAgentWorkspace({ runId, buildId, chatPanel, className }: Wor
                   </TabsContent>
 
                   <TabsContent value="code-diff" className="h-full m-0 p-4">
-                    <Card className="h-full flex items-center justify-center">
-                      <div className="text-center p-8">
-                        <FileCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-semibold mb-2">Code Diff Viewer</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Real-time code change visualization coming in Phase 2
-                        </p>
-                        <Badge variant="outline">Phase 2 Feature</Badge>
-                      </div>
-                    </Card>
+                    <CodeDiffViewer sessionId={runId} />
                   </TabsContent>
 
                   <TabsContent value="database" className="h-full m-0 p-4">
-                    <Card className="h-full flex items-center justify-center">
-                      <div className="text-center p-8">
-                        <Database className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-semibold mb-2">Database Inspector</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Live database inspection and query editor coming in Phase 2
-                        </p>
-                        <Badge variant="outline">Phase 2 Feature</Badge>
-                      </div>
-                    </Card>
+                    <DatabaseViewer sessionId={runId} />
                   </TabsContent>
 
                   <TabsContent value="desktop" className="h-full m-0 p-4">
-                    <Card className="h-full flex items-center justify-center">
-                      <div className="text-center p-8">
-                        <Monitor className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                        <h3 className="text-lg font-semibold mb-2">Desktop Stream</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Live browser automation streaming with manual control coming in Phase 2
-                        </p>
-                        <Badge variant="outline">Phase 2 Feature</Badge>
-                      </div>
-                    </Card>
+                    <DesktopViewer sessionId={runId} />
                   </TabsContent>
                 </div>
               </Tabs>
@@ -187,8 +154,8 @@ export function ArchAgentWorkspace({ runId, buildId, chatPanel, className }: Wor
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-4">
-            <span>ArchAgent v1.0</span>
-            <span>Phase 1 Implementation</span>
+            <span>ArchAgent v2.0</span>
+            <span>Phase 2 - Full Feature Set</span>
           </div>
         </div>
       </div>
@@ -210,7 +177,7 @@ export function ArchAgentWorkspaceSimple({ runId, buildId }: { runId: string; bu
             <p className="text-sm text-muted-foreground">AI-Powered Development Environment</p>
           </div>
         </div>
-        <Badge variant="outline">Phase 1</Badge>
+        <Badge variant="default" className="bg-gradient-to-r from-purple-500 to-pink-500">Phase 2</Badge>
       </div>
 
       <Tabs defaultValue="terminal" className="space-y-4">
@@ -226,17 +193,14 @@ export function ArchAgentWorkspaceSimple({ runId, buildId }: { runId: string; bu
           <TabsTrigger value="code-diff" className="gap-2">
             <FileCode className="h-4 w-4" />
             Code Diff
-            <Badge variant="secondary" className="ml-1 text-xs">Soon</Badge>
           </TabsTrigger>
           <TabsTrigger value="database" className="gap-2">
             <Database className="h-4 w-4" />
             Database
-            <Badge variant="secondary" className="ml-1 text-xs">Soon</Badge>
           </TabsTrigger>
           <TabsTrigger value="desktop" className="gap-2">
             <Monitor className="h-4 w-4" />
             Desktop
-            <Badge variant="secondary" className="ml-1 text-xs">Soon</Badge>
           </TabsTrigger>
         </TabsList>
 
@@ -249,42 +213,15 @@ export function ArchAgentWorkspaceSimple({ runId, buildId }: { runId: string; bu
         </TabsContent>
 
         <TabsContent value="code-diff">
-          <Card className="p-12">
-            <div className="text-center">
-              <FileCode className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Code Diff Viewer</h3>
-              <p className="text-muted-foreground mb-4">
-                Real-time code change visualization - Coming in Phase 2
-              </p>
-              <Badge variant="outline">Phase 2 Feature</Badge>
-            </div>
-          </Card>
+          <CodeDiffViewer sessionId={runId} />
         </TabsContent>
 
         <TabsContent value="database">
-          <Card className="p-12">
-            <div className="text-center">
-              <Database className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Database Inspector</h3>
-              <p className="text-muted-foreground mb-4">
-                Live database inspection - Coming in Phase 2
-              </p>
-              <Badge variant="outline">Phase 2 Feature</Badge>
-            </div>
-          </Card>
+          <DatabaseViewer sessionId={runId} />
         </TabsContent>
 
         <TabsContent value="desktop">
-          <Card className="p-12">
-            <div className="text-center">
-              <Monitor className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-semibold mb-2">Desktop Stream</h3>
-              <p className="text-muted-foreground mb-4">
-                Live browser automation streaming - Coming in Phase 2
-              </p>
-              <Badge variant="outline">Phase 2 Feature</Badge>
-            </div>
-          </Card>
+          <DesktopViewer sessionId={runId} />
         </TabsContent>
       </Tabs>
     </div>

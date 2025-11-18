@@ -4,8 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import { MessageList, Message } from './message-list';
 import { MessageInput } from './message-input';
 import { Button } from '../ui/button';
-import { Plus, Settings, Brain } from 'lucide-react';
+import { Badge } from '../ui/badge';
+import { Plus, Settings, Brain, PanelRight, PanelRightClose } from 'lucide-react';
 import { useAgentStream } from '@/lib/hooks/useAgentStream';
+import { ArchAgentWorkspace, ClarificationModal } from '@/components/archagent';
+import { ResizablePanel, ResizablePanelGroup, ResizableHandle } from '@/components/ui/resizable';
+import { toast } from 'sonner';
 
 interface ChatInterfaceProps {
   userId: string;
@@ -14,7 +18,18 @@ interface ChatInterfaceProps {
 interface ActiveExecution {
   executionId: string;
   runId: string;
+  buildId?: string;
   messageId: string;
+}
+
+interface ClarificationQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  default: string;
+  category: 'technical' | 'design' | 'functional' | 'other';
+  required: boolean;
+  explanation?: string;
 }
 
 export function ChatInterface({ userId }: ChatInterfaceProps) {
@@ -22,6 +37,11 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
   const [activeExecution, setActiveExecution] = useState<ActiveExecution | null>(null);
+  const [showArchAgent, setShowArchAgent] = useState(false);
+  const [showClarification, setShowClarification] = useState(false);
+  const [clarificationQuestions, setClarificationQuestions] = useState<ClarificationQuestion[]>([]);
+  const [pendingPrompt, setPendingPrompt] = useState<string>('');
+  const [pendingExecutionId, setPendingExecutionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Create new session on mount
@@ -78,26 +98,15 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
     }
   }, [agentState, activeExecution]);
 
-  const handleSendMessage = async (content: string) => {
-    if (!sessionId || !content.trim() || isExecuting) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content,
-      createdAt: new Date(),
-    };
-    setMessages(prev => [...prev, userMessage]);
-    setIsExecuting(true);
-
+  const startExecution = async (prompt: string, clarificationAnswers?: Record<string, string>) => {
     try {
       // Start agent execution
       const response = await fetch('/api/agent/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: content,
+          prompt,
+          clarifications: clarificationAnswers,
           context: {
             taskType: 'code',
             complexity: 'medium',
@@ -113,6 +122,19 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       
       if (!data.success) {
         throw new Error(data.error || 'Failed to start agent execution');
+      }
+
+      // If we have clarification answers, save them
+      if (clarificationAnswers && data.executionId) {
+        await fetch('/api/archagent/clarify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'submit',
+            executionId: data.executionId,
+            answers: clarificationAnswers,
+          }),
+        });
       }
 
       // Create agent message placeholder
@@ -140,8 +162,12 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       setActiveExecution({
         executionId: data.executionId,
         runId: data.runId,
+        buildId: data.buildId,
         messageId: agentMessageId,
       });
+
+      // Auto-show ArchAgent workspace when execution starts
+      setShowArchAgent(true);
 
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -155,6 +181,128 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
       setIsExecuting(false);
     }
   };
+
+  const handleSendMessage = async (content: string) => {
+    if (!sessionId || !content.trim() || isExecuting) return;
+
+    // Add user message
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content,
+      createdAt: new Date(),
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setIsExecuting(true);
+
+    try {
+      // Generate clarification questions
+      const clarifyResponse = await fetch('/api/archagent/clarify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generate',
+          prompt: content,
+          executionId: crypto.randomUUID(), // Temp ID for clarification
+        }),
+      });
+
+      if (clarifyResponse.ok) {
+        const clarifyData = await clarifyResponse.json();
+        
+        if (clarifyData.success && clarifyData.questions && clarifyData.questions.length > 0) {
+          // Show clarification modal
+          setClarificationQuestions(clarifyData.questions);
+          setPendingPrompt(content);
+          setShowClarification(true);
+          setIsExecuting(false); // Allow user to interact with clarification modal
+          return;
+        }
+      }
+
+      // No clarifications needed, start execution directly
+      await startExecution(content);
+
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: 'system',
+        content: 'Failed to start agent execution. Please try again.',
+        createdAt: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsExecuting(false);
+    }
+  };
+
+  const handleClarificationSubmit = async (answers: Record<string, string>) => {
+    setShowClarification(false);
+    setIsExecuting(true);
+    toast.success('Clarifications submitted! Starting execution...');
+    await startExecution(pendingPrompt, answers);
+  };
+
+  const handleClarificationAutoDecide = async () => {
+    setShowClarification(false);
+    setIsExecuting(true);
+    
+    try {
+      // Get AI to auto-decide
+      const response = await fetch('/api/archagent/clarify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'auto_decide',
+          prompt: pendingPrompt,
+          executionId: pendingExecutionId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.answers) {
+          toast.success('AI has chosen default answers. Starting execution...');
+          await startExecution(pendingPrompt, data.answers);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to auto-decide:', error);
+    }
+
+    // Fallback: start without clarifications
+    toast.success('Starting execution with defaults...');
+    await startExecution(pendingPrompt);
+  };
+
+  const handleClarificationCancel = () => {
+    setShowClarification(false);
+    setIsExecuting(false);
+    setPendingPrompt('');
+    setPendingExecutionId('');
+    toast.info('Execution cancelled');
+  };
+
+  // Chat Panel Component
+  const chatPanel = (
+    <div className="flex flex-col h-full bg-background">
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <MessageList messages={messages} />
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Message Input */}
+      <div className="border-t px-6 py-4">
+        <MessageInput 
+          onSend={handleSendMessage} 
+          disabled={isExecuting}
+          placeholder="Describe an app you want to build..."
+        />
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full bg-background">
@@ -181,31 +329,62 @@ export function ChatInterface({ userId }: ChatInterfaceProps) {
               )}
             </div>
           )}
+          {activeExecution && showArchAgent && (
+            <Badge variant="default" className="bg-gradient-to-r from-purple-500 to-pink-500">
+              ArchAgent Active
+            </Badge>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={createNewSession} disabled={isExecuting}>
             <Plus className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon">
+          {activeExecution && (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setShowArchAgent(!showArchAgent)}
+              title={showArchAgent ? "Hide ArchAgent Tools" : "Show ArchAgent Tools"}
+            >
+              {showArchAgent ? (
+                <PanelRightClose className="h-4 w-4" />
+              ) : (
+                <PanelRight className="h-4 w-4" />
+              )}
+            </Button>
+          )}
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => window.location.href = '/archagent/settings'}
+            title="ArchAgent Settings"
+          >
             <Settings className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
-        <MessageList messages={messages} />
-        <div ref={messagesEndRef} />
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-hidden">
+        {activeExecution && showArchAgent ? (
+          <ArchAgentWorkspace
+            runId={activeExecution.runId}
+            buildId={activeExecution.buildId}
+            chatPanel={chatPanel}
+          />
+        ) : (
+          chatPanel
+        )}
       </div>
 
-      {/* Message Input */}
-      <div className="border-t px-6 py-4">
-        <MessageInput 
-          onSend={handleSendMessage} 
-          disabled={isExecuting}
-          placeholder="Describe an app you want to build..."
-        />
-      </div>
+      {/* Clarification Modal */}
+      <ClarificationModal
+        open={showClarification}
+        questions={clarificationQuestions}
+        onSubmit={handleClarificationSubmit}
+        onAutoDecide={handleClarificationAutoDecide}
+        onCancel={handleClarificationCancel}
+      />
     </div>
   );
 }

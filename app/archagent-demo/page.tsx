@@ -87,9 +87,9 @@ export default function ArchAgentDemoPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">ArchAgent Phase 1 Demo</h1>
+              <h1 className="text-3xl font-bold mb-2">ArchAgent Phase 2 Demo</h1>
               <p className="text-muted-foreground">
-                Test the new transparency and control features
+                Test all Phase 2 features: Desktop Streaming, Code Diffs, and Database Viewer
               </p>
             </div>
             <div className="flex gap-2">
