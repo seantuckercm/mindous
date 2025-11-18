@@ -13,3 +13,6 @@ export * from "./builds";
 export * from "./code-generations";
 export * from "./execution-state";
 export * from "./preview-deployments";
+export * from "./clarifications";
+export * from "./file-snapshots";
+export * from "./terminal-logs";
